@@ -1,0 +1,717 @@
+{% extends "import.html" %}
+
+{% block content %}
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html, body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+        min-height: 100vh;
+        color: #fff;
+        width: 100%;
+        height: 100%;
+    }
+
+    .brain-glow {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 900px;
+        height: 900px;
+        background: radial-gradient(circle, rgba(102, 126, 234, 0.35) 0%, rgba(118, 75, 162, 0.25) 35%, transparent 70%);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        filter: blur(80px);
+        animation: glow-pulse 6s ease-in-out infinite;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    @keyframes glow-pulse {
+        0%, 100% {
+            box-shadow: 0 0 120px rgba(102, 126, 234, 0.6),
+                        0 0 240px rgba(118, 75, 162, 0.4);
+            transform: translate(-50%, -50%) scale(1);
+        }
+        50% {
+            box-shadow: 0 0 180px rgba(102, 126, 234, 0.8),
+                        0 0 350px rgba(118, 75, 162, 0.6);
+            transform: translate(-50%, -50%) scale(1.15);
+        }
+    }
+
+    .container {
+        position: relative;
+        z-index: 10;
+        max-width: 1400px;
+        margin: 50px auto;
+        padding: 0 30px;
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .header h1 {
+        font-size: 3.8em;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 10px;
+    }
+
+    .header p {
+        font-size: 1.2em;
+        color: rgba(255, 255, 255, 0.75);
+        font-weight: 300;
+    }
+
+    .card {
+        background: rgba(25, 35, 70, 0.75);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 25px;
+        padding: 35px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), 
+                    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        background: rgba(25, 35, 70, 0.85);
+        box-shadow: 0 15px 50px rgba(102, 126, 234, 0.35),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .upload-box {
+        border: 2px dashed rgba(102, 126, 234, 0.5);
+        border-radius: 18px;
+        padding: 60px 30px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        background: rgba(102, 126, 234, 0.08);
+    }
+
+    .upload-box:hover {
+        border-color: rgba(102, 126, 234, 0.8);
+        background: rgba(102, 126, 234, 0.15);
+    }
+
+    .upload-box input[type="file"] {
+        display: none;
+    }
+
+    .upload-btn {
+        display: inline-block;
+        padding: 14px 35px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1em;
+        cursor: pointer;
+        margin-bottom: 12px;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        transition: all 0.3s;
+    }
+
+    .upload-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+    }
+
+    .upload-text {
+        color: rgba(255, 255, 255, 0.6);
+        margin-top: 12px;
+        font-size: 0.95em;
+    }
+
+    .preview {
+        display: none;
+        text-align: center;
+    }
+
+    .preview.show {
+        display: block;
+    }
+
+    .preview img {
+        max-width: 350px;
+        max-height: 350px;
+        border-radius: 16px;
+        border: 2px solid rgba(102, 126, 234, 0.6);
+        margin-bottom: 20px;
+        box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
+    }
+
+    .analyze-btn {
+        padding: 11px 40px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 0.95em;
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        transition: all 0.3s;
+    }
+
+    .analyze-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(102, 126, 234, 0.5);
+    }
+
+    .spinner {
+        display: none;
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(255, 255, 255, 0.2);
+        border-top-color: #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 30px auto;
+    }
+
+    .spinner.show {
+        display: block;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .results {
+        display: none;
+    }
+
+    .results.show {
+        display: block;
+    }
+
+    .result-card {
+        text-align: center;
+        padding: 40px;
+        border-radius: 18px;
+        margin-bottom: 25px;
+    }
+
+    .result-card.tumor {
+        background: linear-gradient(135deg, rgba(255, 107, 107, 0.25) 0%, rgba(255, 82, 82, 0.15) 100%);
+        border: 2px solid rgba(255, 82, 82, 0.5);
+        color: #ff8080;
+    }
+
+    .result-card.normal {
+        background: linear-gradient(135deg, rgba(81, 207, 102, 0.25) 0%, rgba(55, 178, 77, 0.15) 100%);
+        border: 2px solid rgba(81, 207, 102, 0.5);
+        color: #51cf66;
+    }
+
+    .result-icon {
+        font-size: 5em;
+        margin-bottom: 15px;
+        line-height: 1;
+    }
+
+    .result-title {
+        font-size: 2.3em;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .confidence-bar {
+        width: 100%;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 20px 0;
+    }
+
+    .confidence-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        transition: width 0.8s ease;
+    }
+
+    .prob-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .prob-box {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 18px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .prob-label {
+        font-size: 0.85em;
+        opacity: 0.75;
+        margin-bottom: 6px;
+    }
+
+    .prob-value {
+        font-size: 1.6em;
+        font-weight: 700;
+    }
+
+    .info-section {
+        display: none;
+    }
+
+    .info-section.show {
+        display: block;
+    }
+
+    .section-title {
+        font-size: 1.8em;
+        font-weight: 700;
+        margin-bottom: 25px;
+        color: #667eea;
+        display: flex;
+        gap: 10px;
+    }
+
+    .stages {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 15px;
+    }
+
+    .stage {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        padding: 18px;
+        border-radius: 14px;
+        text-align: center;
+        transition: all 0.3s;
+    }
+
+    .stage:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(102, 126, 234, 0.6);
+        transform: translateY(-3px);
+    }
+
+    .stage-title {
+        font-weight: 700;
+        font-size: 1.15em;
+        color: #667eea;
+        margin-bottom: 8px;
+    }
+
+    .stage-text {
+        font-size: 0.9em;
+        opacity: 0.8;
+        line-height: 1.5;
+    }
+
+    .precautions {
+        list-style: none;
+    }
+
+    .precautions li {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        border-left: 4px solid #51cf66;
+        margin-bottom: 10px;
+        color: #ffffff;
+        font-size: 0.95em;
+        line-height: 1.6;
+    }
+
+    .precautions li:before {
+        content: "✓";
+        color: #51cf66;
+        font-size: 1.4em;
+        font-weight: 800;
+        flex-shrink: 0;
+        line-height: 1;
+        margin-top: -2px;
+    }
+
+    .doctors {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 18px;
+    }
+
+    .doctor {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        padding: 22px;
+        border-radius: 14px;
+        transition: all 0.3s;
+    }
+
+    .doctor:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(102, 126, 234, 0.6);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    }
+
+    .doctor-name {
+        font-weight: 700;
+        font-size: 1.12em;
+        color: #667eea;
+        margin-bottom: 4px;
+    }
+
+    .doctor-spec {
+        font-size: 0.85em;
+        opacity: 0.7;
+        margin-bottom: 12px;
+    }
+
+    .doctor-info {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 0.9em;
+    }
+
+    .doctor-info a {
+        color: #667eea;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .doctor-info a:hover {
+        color: #764ba2;
+    }
+
+    .tabs {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+    }
+
+    .tab {
+        padding: 11px 24px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 24px;
+        color: #fff;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.95em;
+        transition: all 0.3s;
+    }
+
+    .tab:hover {
+        background: rgba(102, 126, 234, 0.2);
+        border-color: rgba(102, 126, 234, 0.5);
+    }
+
+    .tab.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: transparent;
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .error {
+        display: none;
+        padding: 16px;
+        background: rgba(255, 107, 107, 0.2);
+        border: 1px solid rgba(255, 107, 107, 0.4);
+        border-radius: 12px;
+        color: #ff8080;
+        font-size: 0.95em;
+        margin-top: 20px;
+    }
+
+    .error.show {
+        display: block;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 0 15px;
+        }
+        .header h1 {
+            font-size: 2.2em;
+        }
+        .card {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="brain-glow"></div>
+
+<div class="container">
+    <div class="header">
+        <h1>🧠 NeuroScan AI</h1>
+        <p>Advanced Brain Tumor Detection & Medical Guidance</p>
+    </div>
+
+    <div class="card">
+        <form id="f1">
+            <div class="upload-box" onclick="document.getElementById('f').click()">
+                <input type="file" id="f" accept=".jpg,.jpeg,.png">
+                <button type="button" class="upload-btn">📁 Upload Brain Scan</button>
+                <div class="upload-text">Click or drag MRI/CT scan image</div>
+            </div>
+        </form>
+    </div>
+
+    <div class="card preview" id="p">
+        <img id="i" src="">
+        <button class="analyze-btn" id="ab">🔍 Analyze Scan</button>
+    </div>
+
+    <div class="spinner" id="l"></div>
+
+    <div class="results" id="r">
+        <div class="card result-card" id="rc"></div>
+    </div>
+
+    <div class="card info-section" id="s">
+        <div class="section-title">📊 Tumor Classification Stages</div>
+        <div class="stages" id="sg"></div>
+    </div>
+
+    <div class="card info-section" id="pr">
+        <div class="section-title">⚠️ Recommended Precautions</div>
+        <ul class="precautions" id="pl"></ul>
+    </div>
+
+    <div class="card info-section" id="d">
+        <div class="section-title">👨‍⚕️ Recommended Specialists</div>
+        <div class="doctors" id="dg"></div>
+    </div>
+
+    <div class="card info-section" id="t">
+        <div class="section-title">🏥 Other Disease Detection</div>
+        <div class="tabs" id="tn"></div>
+    </div>
+
+    <div class="error" id="e"></div>
+</div>
+
+<script>
+const ddata = {
+    brain_tumor: {
+        name: 'Brain Tumor',
+        stages: [
+            { n: 'Stage 1', d: 'Early detection, benign growth' },
+            { n: 'Stage 2', d: 'Localized tumor, manageable' },
+            { n: 'Stage 3', d: 'Advanced, urgent treatment needed' },
+            { n: 'Stage 4', d: 'Critical, intensive care required' }
+        ],
+        precautions: [
+            'Seek immediate consultation with a Neuro-Oncologist',
+            'Get a second medical opinion for confirmation',
+            'Avoid strenuous activities and maintain bed rest',
+            'Stay hydrated and maintain proper nutrition',
+            'Take prescribed medications on exact schedule',
+            'Monitor for sudden changes in symptoms daily',
+            'Avoid exposure to radiation sources',
+            'Schedule regular follow-up MRI scans'
+        ],
+        doctors: [
+            { n: 'Raj Patel', sp: 'Neuro-Oncologist', p: '+91-9876543210', e: 'dr.patel@hospital.com' },
+            { n: 'Priya Sharma', sp: 'Neurosurgeon', p: '+91-9876543211', e: 'dr.sharma@hospital.com' },
+            { n: 'Amit Kumar', sp: 'Oncologist', p: '+91-9876543212', e: 'dr.kumar@hospital.com' }
+        ]
+    },
+    alzheimer: {
+        name: 'Alzheimer\'s Disease',
+        stages: [
+            { n: 'Preclinical', d: 'No symptoms, changes detected' },
+            { n: 'Early', d: 'Mild cognitive decline' },
+            { n: 'Middle', d: 'Moderate cognitive decline' },
+            { n: 'Late', d: 'Severe cognitive decline' }
+        ],
+        precautions: [
+            'Consult Neurologist specializing in Alzheimer\'s',
+            'Brain health exercises and cognitive training',
+            'Social engagement and mental stimulation daily',
+            'Regular physical exercise 5 days per week',
+            'Mediterranean or DASH diet recommended',
+            'Get adequate sleep (7-8 hours nightly)',
+            'Practice stress management and meditation',
+            'Regular cognitive assessments and testing'
+        ],
+        doctors: [
+            { n: 'Sarah Johnson', sp: 'Neurologist', p: '+91-9876543220', e: 'dr.johnson@hospital.com' },
+            { n: 'Michael Chen', sp: 'Geriatrician', p: '+91-9876543221', e: 'dr.chen@hospital.com' }
+        ]
+    },
+    stroke: {
+        name: 'Stroke Risk',
+        stages: [
+            { n: 'At-Risk', d: 'High risk factors present' },
+            { n: 'Early Warning', d: 'Subtle symptoms showing' },
+            { n: 'Acute', d: 'Active stroke symptoms' },
+            { n: 'Recovery', d: 'Post-stroke rehabilitation' }
+        ],
+        precautions: [
+            'Seek emergency medical attention immediately',
+            'Call emergency services (911/100) right away',
+            'Note the exact time symptoms started',
+            'Keep patient comfortable and calm',
+            'Monitor vital signs carefully',
+            'Do not delay - act with urgency',
+            'Provide information to paramedics',
+            'Physical and speech therapy post-stroke'
+        ],
+        doctors: [
+            { n: 'David Martinez', sp: 'Stroke Specialist', p: '+91-9876543230', e: 'dr.martinez@hospital.com' },
+            { n: 'Lisa Anderson', sp: 'Cardiologist', p: '+91-9876543231', e: 'dr.anderson@hospital.com' }
+        ]
+    }
+};
+
+let cd = 'brain_tumor';
+
+document.getElementById('f').addEventListener('change', h1);
+document.getElementById('ab').addEventListener('click', h2);
+document.addEventListener('dragover', e => {
+    e.preventDefault();
+    document.querySelector('.upload-box').style.background = 'rgba(102, 126, 234, 0.25)';
+});
+document.addEventListener('dragleave', () => {
+    document.querySelector('.upload-box').style.background = 'rgba(102, 126, 234, 0.08)';
+});
+document.addEventListener('drop', e => {
+    e.preventDefault();
+    document.querySelector('.upload-box').style.background = 'rgba(102, 126, 234, 0.08)';
+    document.getElementById('f').files = e.dataTransfer.files;
+    h1();
+});
+
+window.addEventListener('load', () => {
+    Object.keys(ddata).forEach(k => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = `tab ${k === 'brain_tumor' ? 'active' : ''}`;
+        b.textContent = ddata[k].name;
+        b.onclick = () => {
+            cd = k;
+            [...document.querySelectorAll('.tab')].forEach(x => x.classList.remove('active'));
+            b.classList.add('active');
+        };
+        document.getElementById('tn').appendChild(b);
+    });
+});
+
+function h1() {
+    const file = document.getElementById('f').files[0];
+    if (!file) return;
+    const r = new FileReader();
+    r.onload = ev => {
+        document.getElementById('i').src = ev.target.result;
+        document.getElementById('p').classList.add('show');
+        document.getElementById('r').classList.remove('show');
+        document.getElementById('e').classList.remove('show');
+    };
+    r.readAsDataURL(file);
+}
+
+function h2() {
+    const file = document.getElementById('f').files[0];
+    if (!file) {
+        sh('Please select an image');
+        return;
+    }
+    const fd = new FormData();
+    fd.append('file', file);
+    document.getElementById('l').classList.add('show');
+    document.getElementById('r').classList.remove('show');
+    fetch('/predict', { method: 'POST', body: fd })
+        .then(x => x.json())
+        .then(d => {
+            document.getElementById('l').classList.remove('show');
+            const t = d.class === 1;
+            const di = ddata[cd];
+            const c = t ? 'tumor' : 'normal';
+            document.getElementById('rc').className = `result-card ${c}`;
+            document.getElementById('rc').innerHTML = `
+                <div class="result-icon">${t ? '⚠️' : '✅'}</div>
+                <div class="result-title">${d.prediction}</div>
+                <div class="confidence-bar">
+                    <div class="confidence-fill" style="width: ${parseFloat(d.confidence)}%">${parseFloat(d.confidence).toFixed(1)}%</div>
+                </div>
+                <div class="prob-grid">
+                    <div class="prob-box"><div class="prob-label">Normal</div><div class="prob-value">${d.no_tumor_probability}</div></div>
+                    <div class="prob-box"><div class="prob-label">Abnormal</div><div class="prob-value">${d.tumor_probability}</div></div>
+                </div>
+            `;
+            document.getElementById('r').classList.add('show');
+            if (t) {
+                const sg = document.getElementById('sg');
+                sg.innerHTML = '';
+                di.stages.forEach((x, i) => {
+                    const e = document.createElement('div');
+                    e.className = 'stage';
+                    e.innerHTML = `<div class="stage-title">${x.n}</div><div class="stage-text">${x.d}</div>`;
+                    sg.appendChild(e);
+                });
+                const pl = document.getElementById('pl');
+                pl.innerHTML = '';
+                di.precautions.forEach(x => {
+                    const li = document.createElement('li');
+                    li.textContent = x;
+                    pl.appendChild(li);
+                });
+                const dg = document.getElementById('dg');
+                dg.innerHTML = '';
+                di.doctors.forEach(x => {
+                    const c = document.createElement('div');
+                    c.className = 'doctor';
+                    c.innerHTML = `<div class="doctor-name">Dr. ${x.n}</div><div class="doctor-spec">${x.sp}</div><div class="doctor-info"><a href="tel:${x.p}">📞 ${x.p}</a><a href="mailto:${x.e}">📧 ${x.e}</a></div>`;
+                    dg.appendChild(c);
+                });
+                document.getElementById('s').classList.add('show');
+                document.getElementById('pr').classList.add('show');
+                document.getElementById('d').classList.add('show');
+            } else {
+                document.getElementById('s').classList.remove('show');
+                document.getElementById('pr').classList.remove('show');
+                document.getElementById('d').classList.remove('show');
+            }
+            document.getElementById('t').classList.add('show');
+        })
+        .catch(err => {
+            document.getElementById('l').classList.remove('show');
+            sh('Error: ' + err.message);
+        });
+}
+
+function sh(m) {
+    document.getElementById('e').textContent = '⚠️ ' + m;
+    document.getElementById('e').classList.add('show');
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,62 @@
+<html lang="en">
+
+<head>
+    <!-- Premium clean font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .navbar {
+            background-color: #0f172a; /* deep modern dark */
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.08); /* subtle divider */
+        }
+
+        .navbar-brand {
+            font-size: 17px;
+            font-weight: 500;
+            color: #e5e7eb !important; /* soft white */
+            letter-spacing: 0.4px;
+            transition: 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            color: #ffffff !important;
+        }
+
+        .container {
+            max-width: 900px; /* keeps it tight and centered */
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+    <div class="container d-flex justify-content-center align-items-center">
+        <a class="navbar-brand" href="#">
+            Brain Tumor Classification Using Deep Learning
+        </a>
+    </div>
+</nav>
+
+    {% block content %}
+    {% endblock %}
+</body>
+
+
+</html>
+
+
+
+
+
+
+
+
+
+
+

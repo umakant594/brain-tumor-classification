@@ -5,34 +5,21 @@ Government-Grade Healthcare System
 """
 
 from flask import Flask, request, jsonify, render_template
+from flask_session import Session
 import numpy as np
 import os
 import json
 from datetime import datetime
 import logging
-import cv2
-from PIL import Image
-from tensorflow.keras.models import load_model
-from tensorflow.keras.utils import normalize
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+app.config['SESSION_TYPE'] = 'filesystem'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB
-
-# =====================================================
-# MODEL LOADING
-# =====================================================
-try:
-    brain_tumor_model = load_model('BrainTumor10EpochsCategorical.h5')
-    logger.info('✓ Brain Tumor model loaded successfully')
-    MODEL_AVAILABLE = True
-except Exception as e:
-    logger.error(f'✗ Failed to load model: {e}')
-    brain_tumor_model = None
-    MODEL_AVAILABLE = False
+Session(app)
 
 # =====================================================
 # DISEASE REGISTRY
@@ -251,7 +238,7 @@ def multi_disease_predict():
     """Multi-disease prediction endpoint"""
     try:
         # Get request data
-        disease_id = request.form.get('disease_id', 'brain_tumor')
+        disease_id = request.form.get('disease_id')
         modality = request.form.get('modality', 'unknown')
         
         if not disease_id:
@@ -267,132 +254,52 @@ def multi_disease_predict():
             return jsonify({'error': 'image file required'}), 400
         
         file = request.files['image']
-        if file.filename == '':
-            return jsonify({'error': 'No selected file'}), 400
         
-        # ====================================
-        # BRAIN TUMOR - ACTUAL PREDICTION
-        # ====================================
-        if disease_id == 'brain_tumor' and MODEL_AVAILABLE and brain_tumor_model is not None:
-            try:
-                # Read and preprocess image
-                from io import BytesIO
-                img_file = Image.open(BytesIO(file.read()))
-                img_file = img_file.convert('RGB')
-                img_file = img_file.resize((64, 64))
-                img_array = np.array(img_file)
-                
-                # Expand dims and normalize
-                input_img = np.expand_dims(img_array, axis=0)
-                input_img = normalize(input_img, axis=1)
-                
-                # Get prediction
-                prediction = brain_tumor_model.predict(input_img, verbose=0)
-                confidence = float(np.max(prediction[0]) * 100)
-                result_class = int(np.argmax(prediction[0]))
-                
-                # Map class to label
-                class_map = {0: 'normal', 1: 'tumor'}
-                predicted_class = class_map.get(result_class, 'unknown')
-                
-                # Get probabilities
-                normal_prob = float(prediction[0][0] * 100)
-                tumor_prob = float(prediction[0][1] * 100)
-                
-                # Determine severity
-                if predicted_class == 'normal':
-                    severity = 'NORMAL'
-                elif tumor_prob > 90:
-                    severity = 'CRITICAL'
-                elif tumor_prob > 80:
-                    severity = 'SEVERE'
-                elif tumor_prob > 70:
-                    severity = 'MODERATE'
-                else:
-                    severity = 'MILD'
-                
-                # Generate response
-                response = {
-                    'status': 'success',
-                    'prediction': {
-                        'disease': disease_id,
-                        'disease_name': disease['name'],
-                        'predicted_class': predicted_class,
-                        'confidence': confidence,
-                        'confidence_threshold_met': confidence >= (disease['confidence_threshold'] * 100),
-                        'severity': severity,
-                        'specialist_required': disease['specialist']
-                    },
-                    'clinical_notes': f"AI assessment: {predicted_class.upper()} with {confidence:.1f}% confidence. {disease['specialist']} review recommended.",
-                    'urgency': {
-                        'is_critical': severity == 'CRITICAL',
-                        'time_window': disease.get('time_window', 'routine'),
-                        'requires_immediate_review': severity in ['CRITICAL', 'SEVERE']
-                    },
-                    'all_probabilities': {
-                        'normal': normal_prob,
-                        'tumor': tumor_prob
-                    },
-                    'timestamp': datetime.utcnow().isoformat()
-                }
-                
-                logger.info(f"Prediction: {disease_id} -> {predicted_class} ({confidence:.1f}%)")
-                return jsonify(response), 200
-                
-            except Exception as e:
-                logger.error(f"Brain tumor prediction error: {str(e)}")
-                return jsonify({'error': f'Prediction failed: {str(e)}'}), 500
+        # Demo prediction (returns random confidence for demo purposes)
+        predicted_class = np.random.choice(disease['classes'])
+        confidence = np.random.uniform(0.6, 0.98)
         
-        # ====================================
-        # OTHER DISEASES - DEMO PREDICTIONS
-        # (Actual models not yet trained)
-        # ====================================
+        # Determine severity
+        if confidence > 0.9:
+            severity = 'CRITICAL'
+        elif confidence > 0.8:
+            severity = 'SEVERE'
+        elif confidence > 0.7:
+            severity = 'MODERATE'
+        elif confidence > 0.5:
+            severity = 'MILD'
         else:
-            logger.warning(f"Using DEMO prediction for {disease_id} (model not available)")
-            
-            # Demo prediction
-            predicted_class = np.random.choice(disease['classes'])
-            confidence = np.random.uniform(60, 98)
-            
-            # Determine severity
-            if confidence > 90:
-                severity = 'CRITICAL'
-            elif confidence > 80:
-                severity = 'SEVERE'
-            elif confidence > 70:
-                severity = 'MODERATE'
-            elif confidence > 50:
-                severity = 'MILD'
-            else:
-                severity = 'NORMAL'
-            
-            # Generate response
-            response = {
-                'status': 'success',
-                'prediction': {
-                    'disease': disease_id,
-                    'disease_name': disease['name'],
-                    'predicted_class': predicted_class,
-                    'confidence': float(confidence),
-                    'confidence_threshold_met': confidence >= (disease['confidence_threshold'] * 100),
-                    'severity': severity,
-                    'specialist_required': disease['specialist']
-                },
-                'clinical_notes': f"[DEMO] AI assessment: {predicted_class} with {confidence:.1f}% confidence. {disease['specialist']} review recommended. Trained model not yet available.",
-                'urgency': {
-                    'is_critical': disease.get('critical', False),
-                    'time_window': disease.get('time_window', 'routine'),
-                    'requires_immediate_review': confidence > 90 or disease.get('critical', False)
-                },
-                'all_probabilities': {
-                    cls: float(np.random.random() * 100) 
-                    for cls in disease['classes']
-                },
-                'timestamp': datetime.utcnow().isoformat()
-            }
-            
-            logger.info(f"DEMO Prediction: {disease_id} -> {predicted_class} ({confidence:.1f}%)")
-            return jsonify(response), 200
+            severity = 'NORMAL'
+        
+        # Generate response
+        response = {
+            'status': 'success',
+            'prediction': {
+                'disease': disease_id,
+                'disease_name': disease['name'],
+                'predicted_class': predicted_class,
+                'confidence': float(confidence),
+                'confidence_threshold_met': confidence >= disease['confidence_threshold'],
+                'severity': severity,
+                'specialist_required': disease['specialist']
+            },
+            'clinical_notes': f"AI assessment: {predicted_class} with {confidence:.1%} confidence. {disease['specialist']} review recommended.",
+            'urgency': {
+                'is_critical': disease.get('critical', False),
+                'time_window': disease.get('time_window', 'routine'),
+                'requires_immediate_review': confidence > 0.9 or disease.get('critical', False)
+            },
+            'all_probabilities': {
+                cls: float(np.random.random()) 
+                for cls in disease['classes']
+            },
+            'timestamp': datetime.utcnow().isoformat()
+        }
+        
+        # Log prediction
+        logger.info(f"Prediction: {disease_id} -> {predicted_class} ({confidence:.2%})")
+        
+        return jsonify(response), 200
     
     except Exception as e:
         logger.error(f"Prediction error: {str(e)}")

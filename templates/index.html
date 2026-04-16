@@ -649,6 +649,385 @@
         box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
     }
 
+    .disease-comparison {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .disease-result-card {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 15px;
+        padding: 18px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .disease-result-card:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: var(--primary);
+        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+        transform: translateY(-4px);
+    }
+
+    .disease-result-card.critical {
+        border-color: #ff6b6b;
+        background: rgba(255, 107, 107, 0.1);
+    }
+
+    .disease-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .disease-name {
+        font-weight: 700;
+        font-size: 1.1em;
+        color: var(--text-light);
+    }
+
+    .disease-category {
+        font-size: 0.75em;
+        background: rgba(102, 126, 234, 0.3);
+        padding: 4px 10px;
+        border-radius: 12px;
+        color: #aaa;
+    }
+
+    .disease-confidence {
+        font-size: 1.8em;
+        font-weight: bold;
+        color: var(--primary);
+        margin: 12px 0;
+    }
+
+    .disease-severity {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        font-weight: 600;
+        margin: 8px 0;
+    }
+
+    .disease-severity.critical {
+        background: rgba(255, 107, 107, 0.3);
+        color: #ff8080;
+    }
+
+    .disease-severity.severe {
+        background: rgba(255, 193, 7, 0.3);
+        color: #ffc107;
+    }
+
+    .disease-severity.moderate {
+        background: rgba(255, 152, 0, 0.3);
+        color: #ff9800;
+    }
+
+    .disease-severity.mild {
+        background: rgba(76, 175, 80, 0.3);
+        color: #81c784;
+    }
+
+    .disease-severity.normal {
+        background: rgba(76, 175, 80, 0.3);
+        color: #81c784;
+    }
+
+    .disease-chart {
+        width: 100%;
+        margin-top: 30px;
+    }
+
+    .chart-bar-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+        gap: 12px;
+    }
+
+    .chart-disease-label {
+        min-width: 180px;
+        font-size: 0.9em;
+        font-weight: 600;
+        padding-right: 10px;
+        text-align: right;
+    }
+
+    .chart-bar-bg {
+        flex: 1;
+        height: 24px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .chart-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 8px;
+        color: white;
+        font-size: 0.75em;
+        font-weight: bold;
+        min-width: 40px;
+        transition: all 0.3s ease;
+    }
+
+    .comparison-filters {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .filter-btn {
+        padding: 8px 16px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        color: var(--text-light);
+        cursor: pointer;
+        font-size: 0.9em;
+        transition: all 0.3s;
+    }
+
+    .filter-btn.active {
+        background: var(--primary);
+        border-color: var(--primary);
+    }
+
+    .disease-loading {
+        text-align: center;
+        padding: 40px 20px;
+        opacity: 0.7;
+    }
+
+    .spinner-small {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        border: 3px solid rgba(255, 255, 255, 0.2);
+        border-top-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Patient Registration Page Styles */
+    .registration-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-darker) 50%, var(--bg-darkest) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 20px;
+    }
+
+    .registration-container.hidden {
+        display: none;
+    }
+
+    .registration-card {
+        background: var(--card-light);
+        border: 1px solid var(--border-light);
+        border-radius: 20px;
+        padding: 50px 40px;
+        max-width: 600px;
+        width: 100%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .registration-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .registration-header h1 {
+        font-size: 2.5em;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 10px;
+    }
+
+    .registration-header p {
+        opacity: 0.7;
+        font-size: 1.1em;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--primary);
+        font-size: 0.95em;
+    }
+
+    .form-input, .form-select, .form-textarea {
+        width: 100%;
+        padding: 12px 15px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        color: var(--text-light);
+        font-size: 1em;
+        font-family: inherit;
+        transition: all 0.3s;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 0.15);
+        border-color: var(--primary);
+        box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .form-textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .webcam-section {
+        text-align: center;
+        margin: 30px 0;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        border: 2px dashed var(--primary);
+    }
+
+    #webcam {
+        width: 100%;
+        max-width: 300px;
+        height: 250px;
+        border-radius: 15px;
+        background: #000;
+        margin: 15px auto;
+        display: block;
+    }
+
+    .webcam-btn {
+        padding: 12px 30px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border: none;
+        border-radius: 25px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 1em;
+        transition: all 0.3s;
+        margin: 10px 5px;
+    }
+
+    .webcam-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .webcam-btn.stop {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+    }
+
+    .patient-photo {
+        width: 150px;
+        height: 150px;
+        border-radius: 15px;
+        margin: 15px auto;
+        object-fit: cover;
+        border: 3px solid var(--primary);
+    }
+
+    .form-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .btn-primary {
+        padding: 14px 30px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border: none;
+        border-radius: 25px;
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 1.05em;
+        transition: all 0.3s;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-primary:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .btn-secondary {
+        padding: 14px 30px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid var(--primary);
+        border-radius: 25px;
+        color: var(--primary);
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 1.05em;
+        transition: all 0.3s;
+    }
+
+    .btn-secondary:hover {
+        background: rgba(102, 126, 234, 0.2);
+    }
+
+    .required-mark {
+        color: #ff6b6b;
+        margin-left: 5px;
+    }
+
+    .patient-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        padding: 8px 16px;
+        border-radius: 20px;
+        color: white;
+        font-size: 0.9em;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
     .error {
         display: none;
         padding: 16px;
@@ -729,12 +1108,83 @@
 
 <div class="brain-glow"></div>
 
+<!-- SIMPLIFIED Patient Registration Page -->
+<div id="registrationPage" class="registration-container">
+    <div class="registration-card">
+        <div class="registration-header">
+            <h1>👤 Patient Registration</h1>
+            <p>Please provide your details for medical records</p>
+        </div>
+
+        <div id="regForm">
+            <!-- Name & Age -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Full Name <span class="required-mark">*</span></label>
+                    <input type="text" id="patientName" class="form-input" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Age <span class="required-mark">*</span></label>
+                    <input type="number" id="patientAge" class="form-input" min="1" max="120" placeholder="Your age">
+                </div>
+            </div>
+
+            <!-- Gender & Phone -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Gender <span class="required-mark">*</span></label>
+                    <select id="patientGender" class="form-select">
+                        <option value="">-- Select Gender --</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                        <option value="Prefer not to say">Prefer not to say</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" id="patientPhone" class="form-input" placeholder="+1-234-567-8900">
+                </div>
+            </div>
+
+            <!-- Email & ID -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="patientEmail" class="form-input" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Patient ID</label>
+                    <input type="text" id="patientId" class="form-input" placeholder="Auto-generated if empty">
+                </div>
+            </div>
+
+            <!-- Medical History -->
+            <div class="form-group">
+                <label class="form-label">Medical History / Symptoms</label>
+                <textarea id="medicalHistory" class="form-textarea" placeholder="Any existing conditions, allergies, or symptoms..."></textarea>
+            </div>
+
+            <!-- Form Buttons -->
+            <div class="form-buttons">
+                <button type="button" class="btn-secondary" onclick="skipRegistration()">⏭️ Skip for Now</button>
+                <button type="button" class="btn-primary" onclick="submitPatientForm()">✅ Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="brain-glow"></div>
+
 <div class="container">
     <div class="top-controls">
         <button class="theme-toggle" id="themeToggle">
             <span id="themeIcon">🌙</span>
             <span id="themeText">Dark</span>
         </button>
+        <div id="patientInfoBar" style="display: none; flex: 1; text-align: center;">
+            <span class="patient-badge" id="patientBadgeText">👤 Loading...</span>
+        </div>
         <div class="upload-modes">
             <button class="mode-btn active" data-mode="single" id="singleMode">📁 Single Image</button>
             <button class="mode-btn" data-mode="batch" id="batchMode">📦 Batch Upload</button>
@@ -812,7 +1262,9 @@
 
     <div class="card info-section" id="t">
         <div class="section-title">🏥 Other Disease Detection</div>
+        <div class="comparison-filters" id="filterContainer"></div>
         <div class="tabs" id="tn"></div>
+        <div id="diseaseComparisonContainer"></div>
     </div>
 
     <div class="error" id="e"></div>
@@ -1032,9 +1484,11 @@ async function analyzeBatch() {
 
     for (const file of files) {
         const fd = new FormData();
-        fd.append('file', file);
+        fd.append('image', file);
+        fd.append('disease_id', 'brain_tumor');
+        fd.append('modality', 'mri_t1');
         try {
-            const res = await fetch('/predict', { method: 'POST', body: fd });
+            const res = await fetch('/api/v2/predict', { method: 'POST', body: fd });
             const data = await res.json();
             batchResults.push({
                 filename: file.name,
@@ -1055,9 +1509,10 @@ async function analyzeBatch() {
 document.getElementById('batchExportBtn').addEventListener('click', exportBatchResults);
 
 function exportBatchResults() {
-    let csv = 'Filename,Prediction,Confidence\\nConfidence,Tumor Probability,Normal Probability\\n';
+    let csv = 'Filename,Disease,Prediction,Confidence,Severity,Timestamp\n';
     batchResults.forEach(r => {
-        csv += `${r.filename},${r.result.prediction},${r.result.confidence},${r.result.tumor_probability},${r.result.no_tumor_probability}\\n`;
+        const pred = r.result.prediction || {};
+        csv += `${r.filename},"${pred.disease_name || 'Unknown'}","${pred.predicted_class || ''}",${pred.confidence ? (pred.confidence * 100).toFixed(1) : 'N/A'},"${pred.severity || ''}","${r.timestamp}"\n`;
     });
     
     const blob = new Blob([csv], { type: 'text/csv' });
@@ -1091,31 +1546,59 @@ function h2() {
         return;
     }
     const fd = new FormData();
-    fd.append('file', file);
+    fd.append('image', file);
+    fd.append('disease_id', 'brain_tumor');
+    fd.append('modality', 'mri_t1');
     document.getElementById('l').classList.add('show');
     document.getElementById('r').classList.remove('show');
-    fetch('/predict', { method: 'POST', body: fd })
+    fetch('/api/v2/predict', { method: 'POST', body: fd })
         .then(x => x.json())
         .then(d => {
             document.getElementById('l').classList.remove('show');
             lastResult = d;
-            const t = d.class === 1;
+            
+            // Handle new multi-disease response format
+            let confidence = 0, prediction = '', isTumor = false, normalProb = 0, abnormalProb = 0;
+            
+            if (d.prediction && d.prediction.confidence !== undefined) {
+                // New format from multi-disease app
+                confidence = d.prediction.confidence * 100;  // Convert to percentage
+                prediction = d.prediction.predicted_class || 'Unknown';
+                isTumor = d.prediction.severity !== 'NORMAL';
+                
+                // Get probabilities from all_probabilities
+                if (d.all_probabilities) {
+                    const probs = Object.values(d.all_probabilities);
+                    if (probs.length > 0) {
+                        abnormalProb = (Math.max(...probs) * 100).toFixed(1);
+                        normalProb = (Math.min(...probs) * 100).toFixed(1);
+                    }
+                }
+            } else if (d.class !== undefined) {
+                // Old format from original app
+                isTumor = d.class === 1;
+                confidence = parseFloat(d.confidence);
+                prediction = d.prediction || 'Unknown';
+                normalProb = d.no_tumor_probability || 0;
+                abnormalProb = d.tumor_probability || 0;
+            }
+            
             const di = ddata[cd];
-            const c = t ? 'tumor' : 'normal';
+            const c = isTumor ? 'tumor' : 'normal';
             document.getElementById('rc').className = `result-card ${c}`;
             document.getElementById('rc').innerHTML = `
-                <div class="result-icon">${t ? '⚠️' : '✅'}</div>
-                <div class="result-title">${d.prediction}</div>
+                <div class="result-icon">${isTumor ? '⚠️' : '✅'}</div>
+                <div class="result-title">${prediction}</div>
                 <div class="confidence-bar">
-                    <div class="confidence-fill" style="width: ${parseFloat(d.confidence)}%">${parseFloat(d.confidence).toFixed(1)}%</div>
+                    <div class="confidence-fill" style="width: ${Math.min(confidence, 100)}%; background: linear-gradient(90deg, #667eea, #764ba2);">${confidence.toFixed(1)}%</div>
                 </div>
                 <div class="prob-grid">
-                    <div class="prob-box"><div class="prob-label">Normal</div><div class="prob-value">${d.no_tumor_probability}</div></div>
-                    <div class="prob-box"><div class="prob-label">Abnormal</div><div class="prob-value">${d.tumor_probability}</div></div>
+                    <div class="prob-box"><div class="prob-label">Normal</div><div class="prob-value">${normalProb}%</div></div>
+                    <div class="prob-box"><div class="prob-label">Abnormal</div><div class="prob-value">${abnormalProb}%</div></div>
                 </div>
             `;
             document.getElementById('r').classList.add('show');
-            if (t) {
+            if (isTumor) {
                 const sg = document.getElementById('sg');
                 sg.innerHTML = '';
                 di.stages.forEach((x, i) => {
@@ -1147,6 +1630,147 @@ function h2() {
                 document.getElementById('pr').classList.remove('show');
                 document.getElementById('d').classList.remove('show');
             }
+            
+            // Multi-Disease Analysis
+            const allDiseases = {
+                'brain_tumor': { name: 'Brain Tumor', category: 'Oncology', icon: '🧠' },
+                'stroke_detection': { name: 'Stroke Detection', category: 'Neurology', icon: '⚡', critical: true },
+                'lung_cancer': { name: 'Lung Cancer', category: 'Oncology', icon: '💨' },
+                'pneumonia': { name: 'Pneumonia', category: 'Pulmonology', icon: '🫁' },
+                'covid_19': { name: 'COVID-19', category: 'Pulmonology', icon: '🦠' },
+                'breast_cancer': { name: 'Breast Cancer', category: 'Oncology', icon: '💗' },
+                'alzheimers': { name: 'Alzheimer\'s Disease', category: 'Neurology', icon: '🧩' },
+                'cardiac_dysfunction': { name: 'Cardiac Dysfunction', category: 'Cardiology', icon: '❤️' },
+                'coronary_artery_disease': { name: 'Coronary Artery Disease', category: 'Cardiology', icon: '🫀' },
+                'multiple_sclerosis': { name: 'Multiple Sclerosis', category: 'Neurology', icon: '🔴' },
+                'colorectal_polyp': { name: 'Colorectal Polyp', category: 'Oncology', icon: '🔍' }
+            };
+            
+            let diseaseResults = {};
+            const imageFile = document.getElementById('f').files[0];
+            const comparisonContainer = document.getElementById('diseaseComparisonContainer');
+            
+            comparisonContainer.innerHTML = `
+                <div class="disease-loading">
+                    <div class="spinner-small"></div>
+                    <p style="margin-top: 15px;">Analyzing all 11 diseases...</p>
+                </div>
+            `;
+            
+            // Parallel predictions for all diseases
+            const predictionPromises = Object.entries(allDiseases).map(([diseaseId, diseaseInfo]) => {
+                const fd = new FormData();
+                fd.append('image', imageFile);
+                fd.append('disease_id', diseaseId);
+                fd.append('modality', 'mri_t1');
+                
+                return fetch('/api/v2/predict', { method: 'POST', body: fd })
+                    .then(res => res.json())
+                    .then(data => ({
+                        diseaseId,
+                        ...diseaseInfo,
+                        result: data.prediction || {}
+                    }))
+                    .catch(err => ({
+                        diseaseId,
+                        ...diseaseInfo,
+                        error: true,
+                        result: { confidence: 0, severity: 'ERROR' }
+                    }));
+            });
+            
+            Promise.all(predictionPromises).then(results => {
+                results.forEach(r => {
+                    diseaseResults[r.diseaseId] = r;
+                });
+                
+                displayMultiDiseaseComparison(diseaseResults);
+            });
+            
+            function displayMultiDiseaseComparison(results) {
+                const categories = ['Oncology', 'Neurology', 'Cardiology', 'Pulmonology'];
+                
+                // Filter buttons
+                const filterContainer = document.getElementById('filterContainer');
+                filterContainer.innerHTML = '<button class="filter-btn active" data-filter="all">All Diseases</button>';
+                categories.forEach(cat => {
+                    const btn = document.createElement('button');
+                    btn.className = 'filter-btn';
+                    btn.textContent = cat;
+                    btn.dataset.filter = cat;
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        filterDiseases(cat);
+                    });
+                    filterContainer.appendChild(btn);
+                });
+                
+                // Comparison grid
+                const html = `
+                    <div class="disease-comparison" id="diseaseGrid">
+                        ${Object.entries(results).map(([id, data]) => `
+                            <div class="disease-result-card ${data.result.severity === 'CRITICAL' ? 'critical' : ''}">
+                                <div class="disease-card-header">
+                                    <div>
+                                        <div style="font-size: 1.5em; margin-bottom: 6px;">${data.icon}</div>
+                                        <div class="disease-name">${data.name}</div>
+                                    </div>
+                                </div>
+                                <div class="disease-category">${data.category}</div>
+                                <div class="disease-confidence">${data.result.confidence ? (data.result.confidence * 100).toFixed(1) : 0}%</div>
+                                <div class="disease-severity ${(data.result.severity || 'normal').toLowerCase()}">
+                                    ${data.result.severity || 'NORMAL'}
+                                </div>
+                                <div style="font-size: 0.85em; opacity: 0.7; margin-top: 10px;">
+                                    Prediction: ${data.result.predicted_class || 'analyzing...'}
+                                </div>
+                                ${data.result.severity === 'CRITICAL' ? '<div style="font-size: 0.8em; color: #ff8080; margin-top: 8px;">⚠️ Requires immediate review</div>' : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="disease-chart">
+                        <h4 style="margin-bottom: 20px; color: var(--primary);">📊 Confidence Comparison</h4>
+                        ${Object.entries(results)
+                            .sort((a, b) => (b[1].result.confidence || 0) - (a[1].result.confidence || 0))
+                            .map(([id, data]) => {
+                                const conf = (data.result.confidence || 0) * 100;
+                                return `
+                                    <div class="chart-bar-container">
+                                        <div class="chart-disease-label">${data.icon} ${data.name}</div>
+                                        <div class="chart-bar-bg">
+                                            <div class="chart-bar-fill" style="width: ${conf}%">
+                                                ${conf.toFixed(1)}%
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                    </div>
+                `;
+                
+                comparisonContainer.innerHTML = html;
+            }
+            
+            function filterDiseases(category) {
+                const cards = document.querySelectorAll('.disease-result-card');
+                cards.forEach(card => {
+                    const parent = Object.values(diseaseResults).find(r => 
+                        r.category === category || category === 'all'
+                    );
+                    if (category === 'all') {
+                        card.style.display = 'block';
+                    } else {
+                        const cardName = card.querySelector('.disease-name').textContent;
+                        const shouldShow = Object.values(diseaseResults).some(r => 
+                            r.name === cardName && r.category === category
+                        );
+                        card.style.display = shouldShow ? 'block' : 'none';
+                    }
+                });
+            }
+            
             document.getElementById('t').classList.add('show');
             saveToHistory(document.getElementById('f').files[0].name, d);
         })
@@ -1163,17 +1787,23 @@ function showPdfReport() {
         return;
     }
     
+    const pred = lastResult.prediction || {};
+    const allProbs = lastResult.all_probabilities || {};
+    const probList = Object.entries(allProbs).map(([k, v]) => `${k}: ${(v * 100).toFixed(1)}%`).join(', ');
+    
     const html = `
-        <h3 style="color: var(--primary); margin-bottom: 15px;">Brain Tumor Analysis Report</h3>
+        <h3 style="color: var(--primary); margin-bottom: 15px;">Medical Analysis Report</h3>
         <p><strong>Analysis Date:</strong> ${new Date().toLocaleString()}</p>
-        <p><strong>Prediction:</strong> ${lastResult.prediction}</p>
-        <p><strong>Confidence:</strong> ${lastResult.confidence}</p>
-        <p><strong>Normal Probability:</strong> ${lastResult.no_tumor_probability}</p>
-        <p><strong>Abnormal Probability:</strong> ${lastResult.tumor_probability}</p>
+        <p><strong>Disease Analyzed:</strong> ${pred.disease_name || 'Unknown'}</p>
+        <p><strong>Prediction:</strong> ${pred.predicted_class || 'Unknown'}</p>
+        <p><strong>Confidence:</strong> ${pred.confidence ? (pred.confidence * 100).toFixed(1) : 'N/A'}%</p>
+        <p><strong>Severity Level:</strong> ${pred.severity || 'Unknown'}</p>
+        <p><strong>Specialist Required:</strong> ${pred.specialist_required || 'General Practitioner'}</p>
+        <p><strong>Class Probabilities:</strong> ${probList || 'N/A'}</p>
         <hr style="margin: 20px 0;">
         <h4 style="color: var(--primary); margin-top: 15px;">⚠️ Important Disclaimer:</h4>
-        <p>This AI analysis is for educational purposes only and should NOT be used for actual medical diagnosis. Always consult qualified healthcare professionals for medical concerns.</p>
-        <p>The model is trained on limited data and may contain errors. Professional medical evaluation is essential.</p>
+        <p>This AI analysis is for educational and supportive purposes only and should NOT be used as a substitute for actual medical diagnosis. Always consult qualified healthcare professionals for medical concerns.</p>
+        <p>The model is trained on limited data and may contain errors. Professional medical evaluation is essential before making any clinical decisions.</p>
     `;
     
     document.getElementById('pdfContent').innerHTML = html;
@@ -1208,9 +1838,10 @@ function saveToHistory(filename, result) {
     history.unshift({
         filename,
         result,
+        patient: currentPatient,
         timestamp: new Date().toISOString()
     });
-    history = history.slice(0, 20); // Keep last 20
+    history = history.slice(0, 50); // Keep last 50
     localStorage.setItem('analysis_history', JSON.stringify(history));
 }
 
@@ -1228,11 +1859,20 @@ function loadHistory() {
         const div = document.createElement('div');
         div.className = 'history-item';
         const date = new Date(item.timestamp).toLocaleString();
-        const isPrediction = item.result.prediction ? `${item.result.prediction} (${item.result.confidence})` : `Batch: ${item.result.count} images`;
+        const patientName = item.patient?.name || 'Anonymous';
+        const patientId = item.patient?.patientId || 'N/A';
+        const isPrediction = item.result.prediction ? `${item.result.prediction.predicted_class} (${(item.result.prediction.confidence * 100).toFixed(1)}%)` : `Batch: ${item.result.count} images`;
+        
         div.innerHTML = `
             <div class="history-item-time">${date}</div>
-            <div class="history-item-result">${item.filename}</div>
-            <div style="font-size: 0.85em; opacity: 0.7;">${isPrediction}</div>
+            <div class="history-item-result">
+                <strong>Patient:</strong> ${patientName} (${patientId})<br>
+                <strong>File:</strong> ${item.filename}<br>
+                <strong>Result:</strong> ${isPrediction}
+            </div>
+            <div style="font-size: 0.85em; opacity: 0.7;">
+                ${item.patient?.photo ? '📸 Photo on file' : ''}
+            </div>
         `;
         div.addEventListener('click', () => {
             if (item.result.prediction) {
@@ -1248,6 +1888,275 @@ function sh(m) {
     document.getElementById('e').textContent = '⚠️ ' + m;
     document.getElementById('e').classList.add('show');
 }
+
+// =====================================================
+// PATIENT REGISTRATION - SIMPLIFIED & BULLETPROOF
+// =====================================================
+
+let currentPatient = null;
+let patientHistory = [];
+
+// INITIALIZE PATIENT HISTORY FROM LOCALSTORAGE
+function loadPatientHistory() {
+    const saved = localStorage.getItem('patientHistory');
+    if (saved) {
+        try {
+            patientHistory = JSON.parse(saved);
+            console.log('Loaded patient history:', patientHistory.length, 'patients');
+        } catch(e) {
+            patientHistory = [];
+        }
+    }
+}
+
+// ALWAYS SHOW REGISTRATION PAGE ON LOAD (Fresh start)
+window.addEventListener('load', function() {
+    console.log('Page loaded - Fresh start with registration form');
+    
+    loadPatientHistory();
+    loadHistoryTab();
+    
+    // Always show registration form for fresh user entry
+    showRegistration();
+    
+    // Hide patient badge (no patient selected yet)
+    const infoBar = document.getElementById('patientInfoBar');
+    if (infoBar) {
+        infoBar.style.display = 'none';
+    }
+    
+    currentPatient = null;  // No patient loaded by default
+});
+
+function showRegistration() {
+    const page = document.getElementById('registrationPage');
+    if (page) {
+        page.classList.remove('hidden');
+        console.log('Registration page shown');
+    }
+}
+
+function hideRegistration() {
+    const page = document.getElementById('registrationPage');
+    if (page) {
+        page.classList.add('hidden');
+        console.log('Registration page hidden');
+    }
+}
+
+function submitPatientForm() {
+    console.log('Submit clicked');
+    
+    const name = document.getElementById('patientName').value.trim();
+    const age = document.getElementById('patientAge').value.trim();
+    const gender = document.getElementById('patientGender').value.trim();
+    const phone = document.getElementById('patientPhone').value.trim();
+    const email = document.getElementById('patientEmail').value.trim();
+    const id = document.getElementById('patientId').value.trim();
+    const history = document.getElementById('medicalHistory').value.trim();
+    
+    // Validation
+    if (!name) {
+        alert('❌ Please enter your name');
+        return;
+    }
+    if (!age || age < 1) {
+        alert('❌ Please enter a valid age');
+        return;
+    }
+    if (!gender) {
+        alert('❌ Please select your gender');
+        return;
+    }
+    
+    currentPatient = {
+        name: name,
+        age: age,
+        gender: gender,
+        phone: phone || 'Not provided',
+        email: email || 'Not provided',
+        patientId: id || 'MRN-' + Date.now(),
+        medicalHistory: history || 'None',
+        registeredAt: new Date().toISOString()
+    };
+    
+    // Save to patient history
+    patientHistory.unshift(currentPatient);
+    localStorage.setItem('patientHistory', JSON.stringify(patientHistory));
+    console.log('Patient saved:', currentPatient);
+    
+    // Hide registration
+    console.log('Hiding registration modal...');
+    const regPage = document.getElementById('registrationPage');
+    if (regPage) {
+        regPage.classList.add('hidden');
+        console.log('Registration modal hidden');
+    }
+    
+    // Show patient badge
+    console.log('Showing patient badge...');
+    showPatientBadge();
+    
+    // Load history
+    console.log('Loading history...');
+    loadHistoryTab();
+    
+    // Show main analysis page
+    console.log('Showing analysis page...');
+    const singleSection = document.getElementById('singleSection');
+    const batchSection = document.getElementById('batchSection');
+    const historySection = document.getElementById('historySection');
+    
+    if (singleSection) {
+        singleSection.style.display = 'block';
+        console.log('singleSection visible');
+    }
+    if (batchSection) batchSection.style.display = 'none';
+    if (historySection) historySection.style.display = 'none';
+    
+    // Activate single button
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('singleMode')?.classList.add('active');
+    
+    alert('✅ Registration complete!');
+    console.log('All steps completed');
+}
+
+function skipRegistration() {
+    console.log('Skip registration clicked');
+    
+    currentPatient = {
+        name: 'Anonymous Patient',
+        age: 'Not specified',
+        gender: 'Not specified',
+        phone: 'N/A',
+        email: 'N/A',
+        patientId: 'ANON-' + Date.now(),
+        medicalHistory: 'None',
+        registeredAt: new Date().toISOString()
+    };
+    
+    patientHistory.unshift(currentPatient);
+    localStorage.setItem('patientHistory', JSON.stringify(patientHistory));
+    console.log('Anonymous patient saved');
+    
+    // Hide registration
+    const regPage = document.getElementById('registrationPage');
+    if (regPage) {
+        regPage.classList.add('hidden');
+        console.log('Registration modal hidden');
+    }
+    
+    // Show patient badge
+    showPatientBadge();
+    
+    // Load history
+    loadHistoryTab();
+    
+    // Show main analysis page
+    const singleSection = document.getElementById('singleSection');
+    const batchSection = document.getElementById('batchSection');
+    const historySection = document.getElementById('historySection');
+    
+    if (singleSection) {
+        singleSection.style.display = 'block';
+        console.log('Analysis page visible');
+    }
+    if (batchSection) batchSection.style.display = 'none';
+    if (historySection) historySection.style.display = 'none';
+    
+    // Activate single button
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('singleMode')?.classList.add('active');
+    
+    console.log('Skip registration completed');
+}
+
+function showPatientBadge() {
+    if (!currentPatient) return;
+    
+    const infoBar = document.getElementById('patientInfoBar');
+    const badge = document.getElementById('patientBadge');
+    
+    if (badge) {
+        const text = `👤 ${currentPatient.name} • ID: ${currentPatient.patientId}`;
+        badge.textContent = text;
+        badge.style.cursor = 'pointer';
+        badge.onclick = editPatientInfo;
+    }
+    
+    if (infoBar) {
+        infoBar.style.display = 'flex';
+    }
+}
+
+function hidePatientBadge() {
+    const infoBar = document.getElementById('patientInfoBar');
+    if (infoBar) {
+        infoBar.style.display = 'none';
+    }
+    currentPatient = null;
+}
+
+function editPatientInfo() {
+    console.log('Edit patient clicked');
+    
+    if (!currentPatient) return;
+    
+    document.getElementById('patientName').value = currentPatient.name;
+    document.getElementById('patientAge').value = currentPatient.age;
+    document.getElementById('patientGender').value = currentPatient.gender;
+    document.getElementById('patientPhone').value = currentPatient.phone;
+    document.getElementById('patientEmail').value = currentPatient.email;
+    document.getElementById('patientId').value = currentPatient.patientId;
+    document.getElementById('medicalHistory').value = currentPatient.medicalHistory;
+    
+    showRegistration();
+}
+
+// Patient history management
+let patientHistoryData = {};
+
+// Load patient from history
+function loadPatientFromHistory(idx) {
+    if (idx < 0 || idx >= patientHistory.length) return;
+    
+    const patientData = patientHistory[idx];
+    console.log('Loading patient from history:', patientData);
+    currentPatient = patientData;
+    hideRegistration();
+    showPatientBadge();
+    alert('Loaded patient: ' + patientData.name);
+}
+
+// Load and display patient history
+function loadHistoryTab() {
+    const historyList = document.getElementById('historyList');
+    if (!historyList) return;
+    
+    if (patientHistory.length === 0) {
+        historyList.innerHTML = '<p style="opacity: 0.6; text-align: center;">No patient history yet. Enter your details to start.</p>';
+        return;
+    }
+    
+    let html = '<div style="display: flex; flex-direction: column; gap: 8px;">';
+    patientHistory.forEach((patient, idx) => {
+        const date = new Date(patient.registeredAt).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        html += `<div onclick="loadPatientFromHistory(${idx})" style="cursor: pointer; padding: 12px; background: rgba(102, 126, 234, 0.15); border-left: 4px solid var(--primary); border-radius: 8px; transition: all 0.3s;"><div style="font-weight: 600; font-size: 0.95em;">${patient.name}</div><div style="font-size: 0.8em; opacity: 0.7; margin-top: 4px;">ID: ${patient.patientId} | Age: ${patient.age} | ${date}</div></div>`;
+    });
+    html += '</div>';
+    historyList.innerHTML = html;
+}
+
+
+
 </script>
 
 <!-- html2pdf library for PDF generation -->
